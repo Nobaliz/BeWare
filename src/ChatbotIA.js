@@ -22,7 +22,7 @@ const ChatbotIA = () => {
 
   return (
     <div>
-      <h2>Chatbot de Apoyo Emocional</h2>
+      <h2>Chatbot-Emocional</h2>
       <textarea
         placeholder="Escribe tu pregunta"
         value={pregunta}
