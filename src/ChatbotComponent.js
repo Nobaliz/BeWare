@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const openAiApiKey = process.env.REACT_APP_OPENAI_API_KEY;
 
 export default function ChatbotComponent() {
   const [input, setInput] = useState('');
@@ -13,22 +12,25 @@ export default function ChatbotComponent() {
 
   const handleSend = async () => {
     try {
-      const result = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
-        {
-          model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: input }]
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
         },
-        {
-          headers: {
-            'Authorization': `Bearer ${openAiApiKey}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-      setResponse(result.data.choices[0].message.content);
+        body: JSON.stringify({ prompt: 'Hola', max_tokens: 50 }),
+      });
+  
+      if (response.status === 429) {
+        console.warn('Se excedió el límite de solicitudes, reintentando...');
+        setTimeout(handleSendMessage, 3000); // Reintento después de 3 segundos
+        return;
+      }
+  
+      const data = await response.json();
+      console.log('Respuesta de la API:', data);
     } catch (error) {
-      console.error('Error al llamar a la API de OpenAI:', error);
+      console.error('Error al enviar la solicitud:', error);
     }
   };
 
