@@ -1,36 +1,29 @@
-import React, { useState } from 'react';
-import guardarInteraccionChatbot from './services/guardarInteraccionChatbot';
+import React, { useState, useEffect } from 'react';
 
-const ChatbotIA = () => {
-  const [pregunta, setPregunta] = useState('');
-  const [respuesta, setRespuesta] = useState('');
-  const [diagnostico, setDiagnostico] = useState('');
-  const idChatbot = Date.now(); // (Generar un ID temporal)
+function Chatbot() {
+  const [messages, setMessages] = useState([]);
+  const [userInput, setUserInput] = useState('');
+  const webhookUrl = 'https://cdn.botpress.cloud/webchat/v2.2/shareable.html?configUrl=https://files.bpcontent.cloud/2024/11/17/16/20241117160304-E5R1Z26H.json'; // Reemplaza con tu URL
 
-  const handleSend = () => {
-    const interaccion = {
-      diagnosticoPreliminar: diagnostico,
-      fechaInteraccion: new Date().toISOString(),
-      idChatbot: idChatbot,
-      preguntas: [pregunta],
-      recomendacion: "Intenta ejercicios de respiración profunda.",
-      respuestaChat: respuesta
-    };
-
-    guardarInteraccionChatbot(interaccion);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Enviar mensaje al webhook de Botpress
+    fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: userInput
+      })
+    })
+    .then(response => response.json())
+    .then((data) => {
+      // Agregar el mensaje del usuario y la respuesta del bot a la lista de mensajes
+      setMessages([...messages, { role: 'user', content: userInput }, { role: 'bot', content: data.message }]);
+      setUserInput('');
+    });
   };
 
-  return (
-    <div>
-      <h2>Chatbot de Apoyo Emocional</h2>
-      <textarea
-        placeholder="Escribe tu pregunta"
-        value={pregunta}
-        onChange={(e) => setPregunta(e.target.value)}
-      />
-      <button onClick={handleSend}>Enviar</button>
-    </div>
-  );
-};
-
-export default ChatbotIA;
+  // ... Resto del componente para mostrar los mensajes
+}

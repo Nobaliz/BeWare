@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Include Botpress Webchat Scripts -->
+  <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js?botId=05a8af5b-adad-4d10-a8d2-50700e113e5c"></script>
+  <script src="https://files.bpcontent.cloud/2024/11/17/16/20241117160304-DC8OEVAB.js" defer></script>
+
+  <!-- Toastify Notifications -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js"></script> 
+  <script defer>
+    // Listening to events and showing notifications with Toastify
+    window.botpress.on('*', (event) => {
+     
+    });
+
+    window.botpress.on('webchat:ready', (conversationId) => {
+      
+    });
+
+    window.botpress.on('webchat:opened', (conversationId) => {
+      
+    });
+
+    window.botpress.on('webchat:closed', (conversationId) => {
+      
+    });
+
+    window.botpress.on('conversation', (conversationId) => {
+      
+    });
+
+    window.botpress.on('message', (message) => {
+      
+    });
+
+    window.botpress.on('messageSent', (message) => {
+   
+    });
+
+    window.botpress.on('error', (error) => {
+      
+    });
+
+    window.botpress.on('webchatVisibility', (visibility) => {
+      
+    });
+
+    window.botpress.on('webchatConfig', (visibility) => {
+      
+    });
+
+    window.botpress.on('customEvent', (anyEvent) => {
+     
+    });
+  </script>
+</body>
+
+</html>

@@ -1,75 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import { getDatabase, ref, set } from "firebase/database";
+import React, { useEffect } from 'react';
 
 const ChatbotComponent = () => {
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-  const [error, setError] = useState(null);
-
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "https://cdn.botpress.cloud/webchat/v2.2/inject.js?botId=05a8af5b-adad-4d10-a8d2-50700e113e5c";   
+    // Crear el script de Botpress y cargarlo dinámicamente
+    const scriptBotpress = document.createElement('script');
+    scriptBotpress.src = 'https://cdn.botpress.cloud/webchat/v2.2/inject.js?botId=05a8af5b-adad-4d10-a8d2-50700e113e5c';
+    scriptBotpress.defer = true;
 
-    script.onload = () => {
-      setIsScriptLoaded(true);
-      if (window.botpressWebChat) {
-        try {
-          window.botpressWebChat.init({
-            host: 'https://cdn.botpress.cloud/webchat/v2.2',
-            configUrl: 'https://files.bpcontent.cloud/2024/11/17/16/20241117160304-E5R1Z26H.json',
-            messagingUrl: "/webchat/v2.2",
-            botId: '05a8af5b-adad-4d10-a8d2-50700e113e5c',
-            clientId: '69921ff8-b819-4937-9b0c-8ef0b574dd6',
-            hideWidget: false,
-            showBotName: true,
-            showBotAvatar: true
-          });
+    // Crear el script de configuración de Botpress
+    const scriptConfig = document.createElement('script');
+    scriptConfig.src = 'https://files.bpcontent.cloud/2024/11/17/16/20241117160304-DC8OEVAB.js';
+    scriptConfig.defer = true;
 
-          // Registrar datos en Firebase cuando se recibe una respuesta del bot
-          window.botpressWebChat.sendEvent({
-            type: 'proactive-trigger',
-            channel: 'web',
-            payload: { text: 'Mensaje de prueba' }
-          });
+    // Crear el script de Toastify
+    const scriptToastify = document.createElement('script');
+    scriptToastify.src = 'https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js';
+    scriptToastify.defer = true;
 
-          // Función para guardar la respuesta en Firebase
-          const saveChatData = (mensajeUsuario, respuestaChat) => {
-            const db = getDatabase();
-            const chatbotRef = ref(db, 'ChatbotIA/chat1_id');
+    // Añadir los scripts al body
+    document.body.appendChild(scriptBotpress);
+    document.body.appendChild(scriptConfig);
+    document.body.appendChild(scriptToastify);
 
-            set(chatbotRef, {
-              mensajeUsuario: mensajeUsuario,
-              respuestaChat: respuestaChat,
-              fechaInteraccion: new Date().toISOString()
-            }).then(() => {
-              console.log('Datos guardados con éxito.');
-            }).catch((error) => {
-              console.error('Error al guardar los datos:', error);
-            });
-          };
+    // Cuando el script de Botpress esté cargado, configurar los eventos
+    scriptBotpress.onload = () => {
+      window.botpress.on('*', (event) => {
+        console.log(`Event: ${event.type}`);
+      });
 
-        } catch (err) {
-          setError(err.message);
-        }
-      } else {
-        setError("El script de Botpress no se cargó correctamente.");
-      }    
+      window.botpress.on('webchat:ready', (conversationId) => {
+        console.log(`Webchat Ready: ${conversationId}`);
+      });
+
+      window.botpress.on('webchat:opened', (conversationId) => {
+        console.log(`Webchat Opened: ${conversationId}`);
+      });
+
+      window.botpress.on('webchat:closed', (conversationId) => {
+        console.log(`Webchat Closed: ${conversationId}`);
+      });
+
+      window.botpress.on('conversation', (conversationId) => {
+        console.log(`Conversation: ${conversationId}`);
+      });
+
+      window.botpress.on('message', (message) => {
+        console.log(`Message Received: ${message.id}`);
+      });
+
+      window.botpress.on('messageSent', (message) => {
+        console.log(`Message Sent: ${message}`);
+      });
+
+      window.botpress.on('error', (error) => {
+        console.log(`Error: ${error}`);
+      });
+
+      window.botpress.on('webchatVisibility', (visibility) => {
+        console.log(`Webchat Visibility: ${visibility}`);
+      });
+
+      window.botpress.on('webchatConfig', (visibility) => {
+        console.log('Webchat Config');
+      });
+
+      window.botpress.on('customEvent', (anyEvent) => {
+        console.log('Received a custom event');
+      });
     };
-    script.onerror = () => {
-      setError("Error al cargar el script del chatbot.");
-    };
-    document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script);
+      // Limpiar los scripts al desmontar el componente
+      document.body.removeChild(scriptBotpress);
+      document.body.removeChild(scriptConfig);
+      document.body.removeChild(scriptToastify);
     };
   }, []);
 
   return (
     <div>
       <h1>Chatbot</h1>
-      {error && <p>Error: {error}</p>}
-      {!isScriptLoaded && <p>Cargando chatbot...</p>}
-      {/* El chat se carga automáticamente dentro del Webchat */}
+      {/* Puedes agregar otros elementos del UI si lo deseas */}
     </div>
   );
 };
