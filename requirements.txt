@@ -1,2 +1,5 @@
 firebase
 axios
+path-browserify os-browserify crypto-browserify
+dotenv
+react-app-rewired customize-cra --save-dev

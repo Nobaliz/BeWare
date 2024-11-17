@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.css';
-require('dotenv').config();
+
 //import ChatbotIA from './ChatbotIA'; // Importa el componente
 import ChatbotComponent from './ChatbotComponent';
 
