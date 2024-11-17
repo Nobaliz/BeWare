@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+const openAiApiKey = process.env.REACT_APP_OPENAI_API_KEY;
+
 export default function ChatbotComponent() {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
@@ -19,7 +21,7 @@ export default function ChatbotComponent() {
         },
         {
           headers: {
-            'Authorization': `Bearer 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`,
+            'Authorization': `Bearer ${openAiApiKey}`,
             'Content-Type': 'application/json'
           }
         }
