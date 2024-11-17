@@ -9,7 +9,7 @@ export default function App() {
   return (
     <div>
       <h1>BeWares</h1>
-
+      <ChatbotComponent />
     </div>
   );
 }
