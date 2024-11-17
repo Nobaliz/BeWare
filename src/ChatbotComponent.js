@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getDatabase, ref, set } from "firebase/database";
 
 const ChatbotComponent = () => {
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
@@ -6,7 +7,7 @@ const ChatbotComponent = () => {
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = "https://cdn.botpress.cloud/webchat/v2.2/inject.js?botId=05a8af5b-adad-4d10-a8d2-50700e113e5c";   
+    script.src = "https://cdn.botpress.cloud/webchat/v2.2/inject.js?botId=05a8af5b-adad-4d10-a8d2-50700e113e5c";   
 
     script.onload = () => {
       setIsScriptLoaded(true);
@@ -22,6 +23,30 @@ const ChatbotComponent = () => {
             showBotName: true,
             showBotAvatar: true
           });
+
+          // Registrar datos en Firebase cuando se recibe una respuesta del bot
+          window.botpressWebChat.sendEvent({
+            type: 'proactive-trigger',
+            channel: 'web',
+            payload: { text: 'Mensaje de prueba' }
+          });
+
+          // Función para guardar la respuesta en Firebase
+          const saveChatData = (mensajeUsuario, respuestaChat) => {
+            const db = getDatabase();
+            const chatbotRef = ref(db, 'ChatbotIA/chat1_id');
+
+            set(chatbotRef, {
+              mensajeUsuario: mensajeUsuario,
+              respuestaChat: respuestaChat,
+              fechaInteraccion: new Date().toISOString()
+            }).then(() => {
+              console.log('Datos guardados con éxito.');
+            }).catch((error) => {
+              console.error('Error al guardar los datos:', error);
+            });
+          };
+
         } catch (err) {
           setError(err.message);
         }
