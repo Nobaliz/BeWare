@@ -1,112 +1,103 @@
 import React, { useState } from "react";
-import Login from "./Login"; // Importar la pantalla de Login
-import RegistroEmocion from "./RegistroEmocion";
-import RegistroHoras from "./RegistroHoras";
-import AfirmacionesDiarias from "./AfirmacionesDiarias";
-import ChatbotComponent from "./ChatbotComponent"; // Importar el componente de chatbot
 
-const App = () => {
-  const [pagina, setPagina] = useState("login");
+const Login = ({ onLogin }) => {
+  const [isSignUp, setIsSignUp] = useState(false);
 
-  const renderizarPagina = () => {
-    switch (pagina) {
-      case "login":
-        return <Login onLogin={() => setPagina("menu")} />;
-      case "registroEmocion":
-        return <RegistroEmocion />;
-      case "registroHoras":
-        return <RegistroHoras />;
-      case "afirmaciones":
-        return <AfirmacionesDiarias />;
-      case "chatbot":
-        return <ChatbotComponent />; // Agregar el ChatbotComponent en el flujo
-      default:
-        return (
-          <div style={styles.menu}>
-            <h1 style={styles.titulo}>Bienvenido, usuario</h1>
-            <div style={styles.botonesContenedor}>
-              <button
-                style={styles.boton}
-                onClick={() => setPagina("registroEmocion")}
-              >
-                ❤️ Registro de Emociones
-              </button>
-              <button
-                style={styles.boton}
-                onClick={() => setPagina("registroHoras")}
-              >
-                🕒 Registro de Horas
-              </button>
-              <button
-                style={styles.boton}
-                onClick={() => setPagina("afirmaciones")}
-              >
-                ⭐ Afirmaciones Diarias
-              </button>
-              <button
-                style={styles.boton}
-                onClick={() => setPagina("chatbot")} // Agregar botón para acceder al chatbot
-              >
-                🤖 Chatbot
-              </button>
-            </div>
-          </div>
-        );
-    }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onLogin(); // Al enviar el formulario, se redirige al menú principal
   };
 
   return (
-    <div style={styles.app}>
-      {renderizarPagina()}
-      {pagina !== "login" && pagina !== "menu" && (
-        <button style={styles.volver} onClick={() => setPagina("menu")}>
-          ⬅ Volver al Menú
+    <div style={styles.contenedor}>
+      <h1 style={styles.titulo}>BeWare - Tu Asistente de Apoyo Emocional</h1>
+      <div style={styles.tabs}>
+        <button
+          style={{ ...styles.tab, borderBottom: !isSignUp ? "2px solid #6200EA" : "none" }}
+          onClick={() => setIsSignUp(false)}
+        >
+          Sign In
         </button>
-      )}
+        <button
+          style={{ ...styles.tab, borderBottom: isSignUp ? "2px solid #6200EA" : "none" }}
+          onClick={() => setIsSignUp(true)}
+        >
+          Sign Up
+        </button>
+      </div>
+      <form onSubmit={handleSubmit} style={styles.formulario}>
+        <input
+          type="email"
+          placeholder="Email"
+          style={styles.input}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          style={styles.input}
+          required
+        />
+        <button type="submit" style={styles.boton}>
+          {isSignUp ? "Sign Up" : "Sign In"}
+        </button>
+      </form>
+      {!isSignUp && <p style={styles.enlace}>Forgot Password?</p>}
     </div>
   );
 };
 
 const styles = {
-  app: {
-    fontFamily: "Arial, sans-serif",
+  contenedor: {
     textAlign: "center",
-    padding: "20px",
-  },
-  menu: {
     padding: "20px",
   },
   titulo: {
-    fontSize: "24px",
+    fontSize: "20px",
     marginBottom: "20px",
-    color: "#4A4A4A",
+    color: "#333",
   },
-  botonesContenedor: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "20px",
+  tabs: {
+    display: "flex",
     justifyContent: "center",
+    marginBottom: "20px",
+  },
+  tab: {
+    padding: "10px 20px",
+    cursor: "pointer",
+    background: "none",
+    border: "none",
+    fontSize: "16px",
+    color: "#6200EA",
+  },
+  formulario: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  input: {
+    width: "80%",
+    padding: "10px",
+    marginBottom: "10px",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+    fontSize: "16px",
   },
   boton: {
-    padding: "20px",
-    backgroundColor: "#F9F9F9",
-    border: "1px solid #E0E0E0",
-    borderRadius: "10px",
-    fontSize: "16px",
-    color: "#333",
-    cursor: "pointer",
-    textAlign: "center",
-    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-  },
-  volver: {
-    marginTop: "20px",
-    padding: "10px 20px",
-    backgroundColor: "#007BFF",
+    width: "80%",
+    padding: "10px",
+    backgroundColor: "#6200EA",
     color: "#fff",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
+    fontSize: "16px",
+  },
+  enlace: {
+    marginTop: "10px",
+    color: "#6200EA",
+    cursor: "pointer",
   },
 };
 
-export default App;
+export default Login;
