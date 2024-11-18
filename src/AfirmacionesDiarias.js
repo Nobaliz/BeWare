@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const AfirmacionesDiarias = () => {
+const AfirmacionesDiarias = ({ setPagina }) => {
   const [affirmation, setAffirmation] = useState({
     fecha: 20241117, // Fecha de ejemplo
     idAfirmacion: 1,
@@ -32,9 +32,23 @@ const AfirmacionesDiarias = () => {
         />
         <h1 style={styles.title}>brand.ai</h1>
         <p style={styles.quote}>{affirmation.mensaje}</p>
-        <button style={styles.button}>Get Started</button>
+        <button
+          style={styles.button}
+          onClick={() => setPagina("menu")} // Cambia al menú
+        >
+          Get Started
+        </button>
         <p style={styles.signIn}>
-          Already have an account? <a href="#signin">Sign In</a>
+          Already have an account?{" "}
+          <a
+            href="#signin"
+            onClick={(e) => {
+              e.preventDefault(); // Prevenir la acción por defecto
+              setPagina("login"); // Cambia a login
+            }}
+          >
+            Sign In
+          </a>
         </p>
       </div>
     </div>

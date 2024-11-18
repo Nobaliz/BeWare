@@ -59,8 +59,6 @@ const ChatbotComponent = () => {
 
   return (
     <div>
-      <h1>Chatbot</h1>
-      {/* Agrega más elementos de UI si lo necesitas */}
     </div>
   );
 };

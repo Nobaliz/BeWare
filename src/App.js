@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Login from "./Login"; // Importar la pantalla de Login
 import RegistroEmocion from "./RegistroEmocion";
 import RegistroHoras from "./RegistroHoras";
 import AfirmacionesDiarias from "./AfirmacionesDiarias";
-import ChatbotComponent from "./ChatbotComponent"; // Importar el componente de chatbot
+import ChatbotComponent from "./ChatbotComponent"; // Importar el Chatbot
 
 const App = () => {
   const [pagina, setPagina] = useState("login");
@@ -17,10 +17,8 @@ const App = () => {
       case "registroHoras":
         return <RegistroHoras />;
       case "afirmaciones":
-        return <AfirmacionesDiarias />;
-      case "chatbot":
-        return <ChatbotComponent />; // Agregar el ChatbotComponent en el flujo
-      default:
+        return <AfirmacionesDiarias setPagina={setPagina} />;
+      case "menu":
         return (
           <div style={styles.menu}>
             <h1 style={styles.titulo}>Bienvenido, usuario</h1>
@@ -43,15 +41,13 @@ const App = () => {
               >
                 ⭐ Afirmaciones Diarias
               </button>
-              <button
-                style={styles.boton}
-                onClick={() => setPagina("chatbot")} // Agregar botón para acceder al chatbot
-              >
-                🤖 Chatbot
-              </button>
             </div>
+            {/* Se agrega una condición aquí para que solo se muestre el ChatbotComponent si estamos en el menú */}
+            {pagina === "menu" && pagina !== "login"&& <ChatbotComponent />}
           </div>
         );
+      default:
+        return null;
     }
   };
 
