@@ -1,0 +1,71 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .registro-horas {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .input-group input[type="number"],
+  .input-group input[type="time"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .input-group input[type="range"] {
+    width: 100%;
+  }
+  
+  .estado-options {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .estado-options button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #f0f0f0;
+    cursor: pointer;
+  }
+  
+  .estado-options button.selected {
+    background: #6200ea;
+    color: white;
+  }
+  
+  .estado-options button:hover {
+    background: #ddd;
+  }
+  

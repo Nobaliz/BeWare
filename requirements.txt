@@ -3,3 +3,5 @@ axios
 path-browserify os-browserify crypto-browserify
 dotenv
 react-app-rewired customize-cra --save-dev
+--save-dev typescript
+--save-dev @types/react @types/react-dom

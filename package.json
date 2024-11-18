@@ -19,7 +19,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "react-scripts": "latest"
+    "react-scripts": "latest",
+    "typescript": "^5.6.3"
   },
   "browserslist": {
     "production": [

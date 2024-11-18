@@ -23,29 +23,32 @@ const ChatbotComponent = () => {
     document.body.appendChild(scriptConfig);
     document.body.appendChild(scriptToastify);
 
-    // Configurar eventos de Botpress
-    window.botpress.on('messageSent', (message) => {
-      console.log('Mensaje enviado:', message);
-      escribirDatosEnFirebase('ChatbotIA', {
-        FechaInteracion: new Date().toISOString(),
-        MensajeUsuario: message.text,
-        PreguntaChat: 'Pregunta del usuario', // Modifica según tu estructura
-        RespuestaChat: 'Respuesta', // Modifica según lo que quieras almacenar
-        Recomendacion: 'Recomendación si aplica',
-        diagnosticoPreliminar: 'Texto de diagnóstico si aplica',
-      });
-    });
-
-    window.botpress.on('message', (message) => {
-      console.log('Mensaje recibido:', message);
-      leerDatosDeFirebase('ChatbotIA')
-        .then((data) => {
-          console.log('Datos leídos de Firebase:', data);
-        })
-        .catch((error) => {
-          console.error('Error al leer datos de Firebase:', error);
+    // Verifica si Botpress se ha cargado correctamente
+    scriptBotpress.onload = () => {
+      console.log('Botpress cargado correctamente');
+      window.botpress.on('messageSent', (message) => {
+        console.log('Mensaje enviado:', message);
+        escribirDatosEnFirebase('ChatbotIA', {
+          FechaInteracion: new Date().toISOString(),
+          MensajeUsuario: message.text,
+          PreguntaChat: 'Pregunta del usuario', // Modifica según tu estructura
+          RespuestaChat: 'Respuesta', // Modifica según lo que quieras almacenar
+          Recomendacion: 'Recomendación si aplica',
+          diagnosticoPreliminar: 'Texto de diagnóstico si aplica',
         });
-    });
+      });
+
+      window.botpress.on('message', (message) => {
+        console.log('Mensaje recibido:', message);
+        leerDatosDeFirebase('ChatbotIA')
+          .then((data) => {
+            console.log('Datos leídos de Firebase:', data);
+          })
+          .catch((error) => {
+            console.error('Error al leer datos de Firebase:', error);
+          });
+      });
+    };
 
     return () => {
       document.body.removeChild(scriptBotpress);
