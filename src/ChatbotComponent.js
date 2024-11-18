@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { escribirDatosEnFirebase, leerDatosDeFirebase } from './services/interacionServices'; // Importa las funciones de Firebase
 
 const ChatbotComponent = () => {
   useEffect(() => {
@@ -22,55 +23,31 @@ const ChatbotComponent = () => {
     document.body.appendChild(scriptConfig);
     document.body.appendChild(scriptToastify);
 
-    // Cuando el script de Botpress esté cargado, configurar los eventos
-    scriptBotpress.onload = () => {
-      window.botpress.on('*', (event) => {
-        console.log(`Event: ${event.type}`);
+    // Configurar eventos de Botpress
+    window.botpress.on('messageSent', (message) => {
+      console.log('Mensaje enviado:', message);
+      escribirDatosEnFirebase('ChatbotIA', {
+        FechaInteracion: new Date().toISOString(),
+        MensajeUsuario: message.text,
+        PreguntaChat: 'Pregunta del usuario', // Modifica según tu estructura
+        RespuestaChat: 'Respuesta', // Modifica según lo que quieras almacenar
+        Recomendacion: 'Recomendación si aplica',
+        diagnosticoPreliminar: 'Texto de diagnóstico si aplica',
       });
+    });
 
-      window.botpress.on('webchat:ready', (conversationId) => {
-        console.log(`Webchat Ready: ${conversationId}`);
-      });
-
-      window.botpress.on('webchat:opened', (conversationId) => {
-        console.log(`Webchat Opened: ${conversationId}`);
-      });
-
-      window.botpress.on('webchat:closed', (conversationId) => {
-        console.log(`Webchat Closed: ${conversationId}`);
-      });
-
-      window.botpress.on('conversation', (conversationId) => {
-        console.log(`Conversation: ${conversationId}`);
-      });
-
-      window.botpress.on('message', (message) => {
-        console.log(`Message Received: ${message.id}`);
-      });
-
-      window.botpress.on('messageSent', (message) => {
-        console.log(`Message Sent: ${message}`);
-      });
-
-      window.botpress.on('error', (error) => {
-        console.log(`Error: ${error}`);
-      });
-
-      window.botpress.on('webchatVisibility', (visibility) => {
-        console.log(`Webchat Visibility: ${visibility}`);
-      });
-
-      window.botpress.on('webchatConfig', (visibility) => {
-        console.log('Webchat Config');
-      });
-
-      window.botpress.on('customEvent', (anyEvent) => {
-        console.log('Received a custom event');
-      });
-    };
+    window.botpress.on('message', (message) => {
+      console.log('Mensaje recibido:', message);
+      leerDatosDeFirebase('ChatbotIA')
+        .then((data) => {
+          console.log('Datos leídos de Firebase:', data);
+        })
+        .catch((error) => {
+          console.error('Error al leer datos de Firebase:', error);
+        });
+    });
 
     return () => {
-      // Limpiar los scripts al desmontar el componente
       document.body.removeChild(scriptBotpress);
       document.body.removeChild(scriptConfig);
       document.body.removeChild(scriptToastify);
@@ -80,7 +57,7 @@ const ChatbotComponent = () => {
   return (
     <div>
       <h1>Chatbot</h1>
-      {/* Puedes agregar otros elementos del UI si lo deseas */}
+      {/* Agrega más elementos de UI si lo necesitas */}
     </div>
   );
 };
