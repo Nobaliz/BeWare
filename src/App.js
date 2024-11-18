@@ -3,6 +3,7 @@ import Login from "./Login"; // Importar la pantalla de Login
 import RegistroEmocion from "./RegistroEmocion";
 import RegistroHoras from "./RegistroHoras";
 import AfirmacionesDiarias from "./AfirmacionesDiarias";
+import ChatbotComponent from "./ChatbotComponent"; // Importar el componente de chatbot
 
 const App = () => {
   const [pagina, setPagina] = useState("login");
@@ -17,6 +18,8 @@ const App = () => {
         return <RegistroHoras />;
       case "afirmaciones":
         return <AfirmacionesDiarias />;
+      case "chatbot":
+        return <ChatbotComponent />; // Agregar el ChatbotComponent en el flujo
       default:
         return (
           <div style={styles.menu}>
@@ -39,6 +42,12 @@ const App = () => {
                 onClick={() => setPagina("afirmaciones")}
               >
                 ⭐ Afirmaciones Diarias
+              </button>
+              <button
+                style={styles.boton}
+                onClick={() => setPagina("chatbot")} // Agregar botón para acceder al chatbot
+              >
+                🤖 Chatbot
               </button>
             </div>
           </div>
