@@ -1,3 +1,4 @@
+
 import { getDatabase, ref, set, get, child } from 'firebase/database';
 
 // Función para escribir datos en Firebase
